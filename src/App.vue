@@ -1,23 +1,11 @@
 <script setup lang="ts">
 import { useUserActions } from './composables/useUserActions';
-import UserList from './components/User/UserList.vue'
+import UserTable from './components/User/UserTable.vue'
 
-const {
-  initialize,
-  users,
-  addUser,
-  editUser,
-  deleteUser
-} = useUserActions();
-
+const { initialize } = useUserActions();
 initialize();
 </script>
 
 <template>
-  <UserList
-    :users="users"
-    @add="addUser"
-    @edit="editUser"
-    @delete="deleteUser"
-  />
+  <UserTable />
 </template>
