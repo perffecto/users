@@ -1,5 +1,5 @@
-import { User } from "@/domain/User";
-import { UserRepository } from "@/application/UserRepository";
+import { User } from "@/domain/models/User";
+import { UserRepository } from "@/domain/repositories/UserRepository";
 
 export type CreateUserFields = Omit<User, 'id'>;
 

@@ -1,6 +1,6 @@
-import { UserRepository } from '@/application/UserRepository';
-import { User } from '@/domain/User';
-import { useUserStore } from '@/store/userStore';
+import { UserRepository } from '@/domain/repositories/UserRepository';
+import { User } from '@/domain/models/User';
+import { useUserStore } from '@/infrastructure/store/userStore';
 import { storeToRefs } from 'pinia';
 import { Ref } from 'vue';
 

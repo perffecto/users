@@ -1,4 +1,4 @@
-import { User } from "@/domain/User";
+import { User } from "@/domain/models/User";
 import { defineStore } from "pinia";
 
 interface State {

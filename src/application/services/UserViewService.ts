@@ -1,4 +1,6 @@
-import { User } from "@/domain/User";
+import { User } from "@/domain/models/User";
+
+export type SortOrder = 'asc' | 'desc';
 
 export class UserViewService {
     filterUsers(users: User[], searchQuery: string): User[] {
@@ -13,7 +15,7 @@ export class UserViewService {
         });
     }
 
-    sortUsers(users: User[], sortKey: keyof User, sortOrder: 'asc' | 'desc'): User[] {
+    sortUsers(users: User[], sortKey: keyof User, sortOrder: SortOrder): User[] {
         if ( !sortKey ) {
             return users;
         }

@@ -1,4 +1,4 @@
-import { User } from '@/domain/User';
+import { User } from '@/domain/models/User';
 import { Ref } from 'vue';
 
 export interface UserRepository {

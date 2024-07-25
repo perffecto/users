@@ -1,6 +1,6 @@
-import { UserDataService } from "@/application/UserDataService";
-import { UserRepository } from "@/application/UserRepository";
-import { UserInMemoryRepository } from "@/infrastructure/UserInMemoryRepository";
+import { UserDataService } from "@/application/services/UserDataService";
+import { UserRepository } from "@/domain/repositories/UserRepository";
+import { UserInMemoryRepository } from "@/infrastructure/repositories/UserInMemoryRepository";
 
 let userRepository: UserRepository;
 

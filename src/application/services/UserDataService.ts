@@ -1,5 +1,5 @@
 import userData from '@/assets/users.json';
-import { User } from '@/domain/User';
+import { User } from '@/domain/models/User';
 
 interface UserData {
     id: number;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useUserService } from '@/composables/useUserService';
-import { User } from '@/domain/User';
+import { useUserService } from '@/presentation/composables/useUserService';
+import { User } from '@/domain/models/User';
 
 const {
     searchQuery,

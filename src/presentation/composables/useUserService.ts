@@ -1,8 +1,8 @@
-import { UserManagementService } from "@/application/UserManagementService";
-import { UserViewService } from "@/application/UserViewService";
-import { useUserRepository } from "@/composables/useUserRepository";
-import { User } from "@/domain/User";
+import { UserManagementService } from "@/application/services/UserManagementService";
+import { SortOrder, UserViewService } from "@/application/services/UserViewService";
+import { User } from "@/domain/models/User";
 import { computed, ref, watch } from "vue";
+import { useUserRepository } from "@/presentation/composables/useUserRepository";
 
 export function useUserService() {
     const { userRepository } = useUserRepository();
@@ -18,7 +18,7 @@ export function useUserService() {
     });
 
     const sortKey = ref<keyof User>('id');
-    const sortOrder = ref<'asc' | 'desc'>('asc');
+    const sortOrder = ref<SortOrder>('asc');
     const sortedUsers = computed(() => {
         return userViewService.sortUsers(filteredUsers.value, sortKey.value, sortOrder.value);
     });
