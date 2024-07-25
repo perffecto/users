@@ -1,5 +1,5 @@
+import { User } from "@/domain/User";
 import { defineStore } from "pinia";
-import { User, AddUserPayload, UpdateUserPayload } from "@/types/User";
 
 interface State {
     users: User[];
@@ -11,31 +11,24 @@ export const useUserStore = defineStore('user', {
     }),
 
     actions: {
-        initialize(users: User[]) {
+        initialize(users: User[]): void {
             this.users = users;
         },
 
-        addUser(payload: AddUserPayload) {
-            const lastUser = this.users[this.users.length - 1];
-            const lastId = lastUser?.id ?? 0;
-
-            const user: User = {
-                id: lastId + 1,
-                ...payload,
-            };
-
+        createUser(user: User): User {
             this.users.push(user);
+            return user;
         },
 
-        updateUser({ id, ...payload }: UpdateUserPayload) {
-            const user = this.users.find(user => user.id === id);
+        updateUser(updatedUser: User): User {
+            const user = this.users.find(user => user.id === updatedUser.id);
 
-            if ( user ) {
-                Object.assign(user, payload);
-            }
+            return user
+                ? Object.assign(user, updatedUser)
+                : updatedUser;
         },
 
-        deleteUser(id: number) {
+        deleteUser(id: number): void {
             this.users = this.users.filter(user => user.id !== id);
         },
     },

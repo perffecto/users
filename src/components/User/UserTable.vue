@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { User } from '@/types/User';
-import { usePagination } from '@/composables/usePagination';
-import { useSearchAndSort } from '@/composables/useSearchAndSort';
-import { useUserActions } from '@/composables/useUserActions';
+import { useUserService } from '@/composables/useUserService';
+import { User } from '@/domain/User';
 
-const { users, addUser, editUser, deleteUser } = useUserActions();
-const { search, setSortKey, filtered: filteredUsers } = useSearchAndSort(users);
-
-const ITEMS_PER_PAGE = 5;
 const {
-    current,
-    total,
+    searchQuery,
+    currentPage,
+    totalPages,
     nextPage,
     prevPage,
-    paginated
-} = usePagination(filteredUsers, ITEMS_PER_PAGE);
-
+    setSortKey,
+    users,
+    createUser,
+    editUser,
+    deleteUser,
+} = useUserService();
 
 function sort(event: Event) {
     const target = event.target as HTMLElement;
@@ -31,12 +29,12 @@ function sort(event: Event) {
         <div class="user-table__header">
             <h2 class="user-table__title">Users</h2>
 
-            <button @click="addUser" class="user-table__button user-table__header-button">
+            <button @click="createUser" class="user-table__button user-table__header-button">
                 Add User
             </button>
         </div>
 
-        <input v-model="search" placeholder="Search" class="user-table__search" />
+        <input v-model="searchQuery" placeholder="Search" class="user-table__search" />
     </div>
 
 
@@ -50,7 +48,7 @@ function sort(event: Event) {
             <th class="user-table__table-cell user-table__table-cell_type_head">Actions</th>
         </tr>
 
-        <tr v-for="user in paginated" :key="user.id" class="user-table__table-row">
+        <tr v-for="user in users" :key="user.id" class="user-table__table-row">
             <td class="user-table__table-cell">{{ user.id }}</td>
             <td class="user-table__table-cell">{{ user.firstName }}</td>
             <td class="user-table__table-cell">{{ user.secondName }}</td>
@@ -63,11 +61,12 @@ function sort(event: Event) {
         </tr>
     </table>
 
-    <div>
-        <button @click="prevPage" :disabled="current === 1">Previous</button>
-        Page {{ current }} of {{ total }}
-        <button @click="nextPage" :disabled="current >= total">Next</button>
+    <div v-if="totalPages">
+        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+        Page {{ currentPage }} of {{ totalPages }}
+        <button @click="nextPage" :disabled="currentPage >= totalPages">Next</button>
     </div>
+    <p v-else>No data available</p>
 </template>
 
 <style lang="less">
