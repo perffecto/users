@@ -4,7 +4,7 @@ export function usePagination<T>(items: Ref<T[]>, perPage: number) {
     const current = ref(1);
     const total = computed(() => Math.ceil(items.value.length / perPage) || 1);
 
-    const paginatedItems = computed(() => {
+    const paginated = computed(() => {
         const startIndex = (current.value - 1) * perPage;
         const endIndex = startIndex + perPage;
 
@@ -38,7 +38,7 @@ export function usePagination<T>(items: Ref<T[]>, perPage: number) {
     return {
         current,
         total,
-        paginatedItems,
+        paginated,
         nextPage,
         prevPage,
     };

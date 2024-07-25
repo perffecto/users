@@ -5,19 +5,21 @@ export function useSearchAndSort<T extends object>(users: Ref<T[]>) {
     const sortKey = ref<keyof T | null>(null);
     const sortOrder = ref<'asc' | 'desc'>('asc');
 
-    const searchAndSorted = computed(() => {
-        let result = [...users.value];
+    const filtered = computed(() => {
+        let filtered = [...users.value];
 
         if ( search.value ) {
             const query = search.value.toLowerCase();
 
-            result = result.filter(item => {
-                return Object.values(item).some(value => value.toString().toLowerCase().includes(query));
+            filtered = filtered.filter(item => {
+                return Object.values(item).some(value => {
+                    return value.toString().toLowerCase().includes(query);
+                });
             });
         }
 
         if ( sortKey.value ) {
-            result = result.sort((a, b) => {
+            filtered = filtered.sort((a, b) => {
                 const key = sortKey.value as keyof T;
 
                 if ( a[key] < b[key] ) {
@@ -32,7 +34,7 @@ export function useSearchAndSort<T extends object>(users: Ref<T[]>) {
             });
         }
 
-        return result;
+        return filtered;
     });
 
     const setSortKey = (key: UnwrapRef<keyof T>) => {
@@ -49,6 +51,6 @@ export function useSearchAndSort<T extends object>(users: Ref<T[]>) {
         sortKey,
         sortOrder,
         setSortKey,
-        searchAndSorted,
+        filtered,
     };
 }

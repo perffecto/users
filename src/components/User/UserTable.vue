@@ -1,59 +1,64 @@
 <script setup lang="ts">
-import { usePagination } from '../../composables/usePagination';
-import { useSearchAndSort } from '../../composables/useSearchAndSort';
-import { useUserActions } from '../../composables/useUserActions';
-import { User } from '../../types/User';
+import { User } from '@/types/User';
+import { usePagination } from '@/composables/usePagination';
+import { useSearchAndSort } from '@/composables/useSearchAndSort';
+import { useUserActions } from '@/composables/useUserActions';
 
 const { users, addUser, editUser, deleteUser } = useUserActions();
-const { search, setSortKey, searchAndSorted } = useSearchAndSort(users);
+const { search, setSortKey, filtered: filteredUsers } = useSearchAndSort(users);
 
-const itemsPerPage = 5;
+const ITEMS_PER_PAGE = 5;
 const {
     current,
     total,
     nextPage,
     prevPage,
-    paginatedItems,
-} = usePagination(searchAndSorted, itemsPerPage);
+    paginated
+} = usePagination(filteredUsers, ITEMS_PER_PAGE);
 
 
 function sort(event: Event) {
     const target = event.target as HTMLElement;
 
-    if ( target && target.hasAttribute('data-sort') ) {
-        const sortKey = target.getAttribute('data-sort') as keyof User;
-        setSortKey(sortKey);
+    if ( target?.dataset.sortKey ) {
+        setSortKey(target.dataset.sortKey as keyof User);
     }
 }
 </script>
 
 <template>
-    <div class="user-header">
-        <h2>Users</h2>
-        <button @click="addUser">Add User</button>
+    <div class="user-table">
+        <div class="user-table__header">
+            <h2 class="user-table__title">Users</h2>
+
+            <button @click="addUser" class="user-table__button user-table__header-button">
+                Add User
+            </button>
+        </div>
+
+        <input v-model="search" placeholder="Search" class="user-table__search" />
     </div>
 
-    <input v-model="search" placeholder="Search" class="user-search" />
 
-    <table class="user-table">
-        <tr @click="sort">
-            <th data-sort="id">Id</th>
-            <th data-sort="firstName">First Name</th>
-            <th data-sort="secondName">Second Name</th>
-            <th data-sort="email">Email</th>
-            <th data-sort="lastVisitedAt">Last Visited</th>
-            <th>Actions</th>
+    <table class="user-table__table">
+        <tr @click="sort" class="user-table__table-row">
+            <th class="user-table__table-cell user-table__table-cell_type_head" data-sort-key="id">Id</th>
+            <th class="user-table__table-cell user-table__table-cell_type_head" data-sort-key="firstName">First Name</th>
+            <th class="user-table__table-cell user-table__table-cell_type_head" data-sort-key="secondName">Second Name</th>
+            <th class="user-table__table-cell user-table__table-cell_type_head" data-sort-key="email">Email</th>
+            <th class="user-table__table-cell user-table__table-cell_type_head" data-sort-key="lastVisitedAt">Last Visited</th>
+            <th class="user-table__table-cell user-table__table-cell_type_head">Actions</th>
         </tr>
 
-        <tr v-for="user in paginatedItems" :key="user.id">
-            <td>{{ user.id }}</td>
-            <td>{{ user.firstName }}</td>
-            <td>{{ user.secondName }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ new Date(user.lastVisitedAt).toLocaleString() }}</td>
-            <td>
-                <button @click="editUser(user)">Edit</button>
-                <button @click="deleteUser(user.id)">Delete</button>
+        <tr v-for="user in paginated" :key="user.id" class="user-table__table-row">
+            <td class="user-table__table-cell">{{ user.id }}</td>
+            <td class="user-table__table-cell">{{ user.firstName }}</td>
+            <td class="user-table__table-cell">{{ user.secondName }}</td>
+            <td class="user-table__table-cell">{{ user.email }}</td>
+            <td class="user-table__table-cell">{{ new Date(user.lastVisitedAt).toLocaleString() }}</td>
+            <td class="user-table__table-cell">
+                <button class="user-table__button" @click="editUser(user)">Edit</button>
+                <button class="user-table__button" @click="deleteUser(user.id)">Delete</button>
             </td>
         </tr>
     </table>
@@ -65,54 +70,55 @@ function sort(event: Event) {
     </div>
 </template>
 
-<style>
-    /* Обычно я юзаю less + БЭМ */
-
-    .user-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .user-header button {
-        margin-left: 12px;
-    }
-
-    .user-search {
-        width: 300px;
-        margin-bottom: 24px;
-        padding: 3px 12px;
-        font-size: 1.25rem;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-
-        &::placeholder {
-            font-weight: 300;
-        }
-    }
-
+<style lang="less">
     .user-table {
-        table-layout: fixed;
-        border-collapse: collapse;
-        margin-bottom: 1rem;
-    }
+        @bl: ~'.user-table';
 
-    .user-table th,
-    .user-table td {
-        padding: 0.5rem 1rem;
-    }
+        &__header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .user-table th {
-        background: #f3f3f3;
-        cursor: pointer;
-        user-select: none;
-    }
+        &__header-button {
+            margin-left: 12px;
+        }
 
-    .user-table button {
-        margin: 0 3px;
-    }
+        &__search {
+            width: 300px;
+            margin-bottom: 24px;
+            padding: 12px 12px;
+            font-size: 1.25rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
 
-    .user-table tr:nth-child(odd) td {
-        background: #f3f3f3;
+            &::placeholder {
+                font-weight: 300;
+            }
+        }
+
+        &__table {
+            margin-bottom: 1rem;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+        &__table-row:nth-child(odd) {
+            background: #f3f3f3;
+        }
+
+        &__table-cell {
+            padding: 0.5rem 1rem;
+
+            &_type_head {
+                background: #f3f3f3;
+                cursor: pointer;
+                user-select: none;
+            }
+        }
+
+        &__button:not(:last-child) {
+            margin-right: 6px;
+        }
     }
 </style>

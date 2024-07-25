@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { AddUserPayload, UpdateUserPayload, User } from "../types/User";
+import { User, AddUserPayload, UpdateUserPayload } from "@/types/User";
 
 interface State {
     users: User[];
