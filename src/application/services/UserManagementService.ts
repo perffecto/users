@@ -1,7 +1,6 @@
 import { User } from "@/domain/models/User";
 import { UserRepository } from "@/domain/repositories/UserRepository";
-
-export type CreateUserFields = Omit<User, 'id'>;
+import { CreateUserFields } from "./types";
 
 export class UserManagementService {
     constructor(private userRepository: UserRepository) {}

@@ -1,6 +1,5 @@
 import { User } from "@/domain/models/User";
-
-export type SortOrder = 'asc' | 'desc';
+import { SortOrder } from "./types";
 
 export class UserViewService {
     filterUsers(users: User[], searchQuery: string): User[] {
