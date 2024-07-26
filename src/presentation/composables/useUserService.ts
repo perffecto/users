@@ -1,8 +1,9 @@
 import { UserManagementService } from "@/application/services/UserManagementService";
-import { SortOrder, UserViewService } from "@/application/services/UserViewService";
+import { UserViewService } from "@/application/services/UserViewService";
 import { User } from "@/domain/models/User";
 import { computed, ref, watch } from "vue";
 import { useUserRepository } from "@/presentation/composables/useUserRepository";
+import { SortOrder } from "@/application/services/types";
 
 export function useUserService() {
     const { userRepository } = useUserRepository();
