@@ -4,7 +4,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base : '/users/',
+    base : '/users-management/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

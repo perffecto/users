@@ -1,4 +1,4 @@
-Demo: https://perffecto.github.io/users/
+Demo: https://perffecto.github.io/users-management/
 
 - Поиск
 - Сортировка
